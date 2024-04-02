@@ -1,5 +1,6 @@
 package cn.zzz.chatbot.api.test;
 
+import cn.zzz.chatbot.api.domain.wenxinyiyan.IWenxinyiyanApi;
 import cn.zzz.chatbot.api.domain.zsxq.IZsxqApi;
 import cn.zzz.chatbot.api.domain.zsxq.model.aggregates.UnAnsweredQuestionsAggregates;
 import cn.zzz.chatbot.api.domain.zsxq.model.vo.Topics;
@@ -32,9 +33,15 @@ public class SpringBootRunTest {
     private String groupId;
     @Value("${chatbot-api.cookie}")
     private String cookie;
+    @Value("${chatbot-api.apiKey}")
+    private String apiKey;
+    @Value("${chatbot-api.secretKey}")
+    private String secretKey;
 
     @Resource
     private IZsxqApi zsxqApi;
+    @Resource
+    private IWenxinyiyanApi wenxinyiyanApi;
 
     @Test
     public void test_zsxqApi() throws IOException {
@@ -47,9 +54,22 @@ public class SpringBootRunTest {
             String text = topic.getQuestion().getText();
             logger.info("topicId：{} text：{}", topicId, text);
 
+            String token = wenxinyiyanApi.getWenxinToken(apiKey, secretKey);
+            logger.info("测试结果。 token: " + token);
+            String result = wenxinyiyanApi.getAnswer(token, "帮我写一个java冒泡排序");
+            logger.info("测试结果。 result:" + result);
+
             // 回答问题
-            zsxqApi.answer(groupId, cookie, topicId, text, false);
+            zsxqApi.answer(groupId, cookie, topicId, result, false);
         }
+    }
+
+    @Test
+    public void test_wenxinyiyan() throws IOException{
+        String token = wenxinyiyanApi.getWenxinToken(apiKey, secretKey);
+        logger.info("测试结果。 token: " + token);
+        String result = wenxinyiyanApi.getAnswer(token, "帮我写一个java冒泡排序");
+        logger.info("测试结果。 result:" + result);
     }
 
 
