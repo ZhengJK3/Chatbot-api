@@ -90,6 +90,11 @@
                 <artifactId>hutool-all</artifactId>
                 <version>5.8.10</version>
             </dependency>
+            <dependency>
+                <groupId>cn.zzz</groupId>
+                <artifactId>chatbot-api-interfaces</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
